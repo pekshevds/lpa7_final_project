@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth import get_user_model
 from auth_app.models import LPA7User
 
 
@@ -45,3 +46,9 @@ class LPA7UserChangeForm(forms.ModelForm):
     class Meta:
         model = LPA7User
         fields = ["email", "password", "is_active", "is_admin"]
+
+
+class LoginLPA7UserForm(AuthenticationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ["email", "password"]
