@@ -16,7 +16,7 @@ class LPA7UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ["email"]
+        fields = ["email", "name", "birth_day", "image"]
 
     def clean_password2(self) -> str:
         # Check that the two password entries match
@@ -41,19 +41,9 @@ class LPA7UserChangeForm(forms.ModelForm):
     disabled password hash display field.
     """
 
-    # password = ReadOnlyPasswordHashField()
-
     class Meta:
         model = get_user_model()
-        fields = ["is_active", "is_admin"]
-
-    def save(self, commit: bool = True) -> LPA7User:
-        user = super().save(commit=False)
-        user.is_active = self.cleaned_data.get("is_active", user.is_active)
-        user.is_admin = self.cleaned_data.get("is_admin", user.is_admin)
-        if commit:
-            user.save()
-        return user
+        fields = ["is_active", "name", "birth_day", "image"]
 
 
 class LoginLPA7UserForm(AuthenticationForm):

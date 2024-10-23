@@ -37,6 +37,13 @@ class LPA7User(AbstractBaseUser):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    name = models.CharField(
+        verbose_name="name", max_length=150, null=True, blank=True, default=""
+    )
+    birth_day = models.DateField(verbose_name="birth day", null=True, blank=True)
+    image = models.ImageField(
+        upload_to="images/", verbose_name="avatar", null=True, blank=True
+    )
 
     objects = LPA7UserManager()
 

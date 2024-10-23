@@ -17,11 +17,11 @@ class LPA7UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ["email", "is_admin"]
+    list_display = ["email", "is_admin", "name", "birth_day"]
     list_filter = ["is_admin"]
     fieldsets = [
         (None, {"fields": ["email", "password"]}),
-        # ("Personal info", {"fields": ["date_of_birth"]}),
+        ("Personal info", {"fields": ["name", "birth_day", "image"]}),
         ("Permissions", {"fields": ["is_admin"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin

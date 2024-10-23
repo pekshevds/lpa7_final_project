@@ -29,7 +29,7 @@ class CreateLPA7User(View):
         )
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        user_form = LPA7UserCreationForm(request.POST)
+        user_form = LPA7UserCreationForm(request.POST, request.FILES)
         if user_form.is_valid():
             user_form.save()
             return HttpResponseRedirect(reverse("auth:index"))
@@ -48,7 +48,7 @@ class ChangeLPA7User(LoginView):
 
     def post(self, request: HttpRequest, email: str) -> HttpResponse:
         user = get_object_or_404(LPA7User, email=email)
-        user_form = LPA7UserChangeForm(instance=user, data=request.POST)
+        user_form = LPA7UserChangeForm(request.POST, request.FILES, instance=user)
         if user_form.is_valid():
             user_form.save()
         return HttpResponseRedirect(reverse("auth:index"))
