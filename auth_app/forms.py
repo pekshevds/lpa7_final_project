@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
 from auth_app.models import LPA7User
 
@@ -15,10 +15,10 @@ class LPA7UserCreationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = LPA7User
+        model = get_user_model()
         fields = ["email"]
 
-    def clean_password2(self):
+    def clean_password2(self) -> str:
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
@@ -26,7 +26,7 @@ class LPA7UserCreationForm(forms.ModelForm):
             raise ValidationError("Passwords don't match")
         return password2
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> LPA7User:
         # Save the provided password in hashed format
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
@@ -41,11 +41,19 @@ class LPA7UserChangeForm(forms.ModelForm):
     disabled password hash display field.
     """
 
-    password = ReadOnlyPasswordHashField()
+    # password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = LPA7User
-        fields = ["email", "password", "is_active", "is_admin"]
+        model = get_user_model()
+        fields = ["is_active", "is_admin"]
+
+    def save(self, commit: bool = True) -> LPA7User:
+        user = super().save(commit=False)
+        user.is_active = self.cleaned_data.get("is_active", user.is_active)
+        user.is_admin = self.cleaned_data.get("is_admin", user.is_admin)
+        if commit:
+            user.save()
+        return user
 
 
 class LoginLPA7UserForm(AuthenticationForm):

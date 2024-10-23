@@ -1,19 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>
-        hello world        
-    </h1>
-    <p>
-        <a href="{% url 'auth:login' %}">login</a>
-    </p>
-    <p>
-        <a href="{% url 'auth:logout' %}">logout</a>
-    </p>
-</body>
-</html>
+{% extends 'index_app/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>
+                auth       
+            </h1>
+            <h1>
+                Текущий пользователь: {{ current_user }}
+            </h1>
+            {% for user in users %}
+            <p>
+                <a href="{% url 'auth:change' email=user.email %}">{{ user }}</a>
+            </p>
+            {% endfor %}
+            <p>
+                <a href="{% url 'auth:login' %}">login</a>
+            </p>
+            <p>
+                <a href="{% url 'auth:logout' %}">logout</a>
+            </p>
+            <p>
+                <a href="{% url 'auth:create' %}">create new</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
